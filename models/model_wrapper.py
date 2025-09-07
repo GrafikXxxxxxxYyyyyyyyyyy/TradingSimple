@@ -5,13 +5,17 @@ import torch
 from safetensors.torch import save_model, load_model
 from src import (
     TSFeatureExtractor,
-    TSTransformer
+    TSTransformer,
+    CNNFeatureExtractor,
+    LSTMWithAttention,
 )
 
 
 
 MODEL_REGISTRY = {
     "TSTransformer": TSTransformer,
+    "CNNFeatureExtractor": CNNFeatureExtractor,
+    "LSTMWithAttention": LSTMWithAttention,
 }
 
 

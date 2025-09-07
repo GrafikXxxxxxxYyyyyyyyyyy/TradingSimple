@@ -1,0 +1,5 @@
+{
+  "model_type": "CNNFeatureExtractor",
+  "input_dim": 256,
+  "head_dim": 768
+}

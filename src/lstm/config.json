@@ -1,0 +1,7 @@
+{
+  "model_type": "LSTMWithAttention",
+  "input_dim": 256,
+  "hidden_dim": 512,
+  "num_layers": 2,
+  "head_dim": 768
+}
