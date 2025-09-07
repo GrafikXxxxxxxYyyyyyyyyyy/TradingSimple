@@ -210,4 +210,4 @@ __marimo__/
 .TSvenv/
 data/
 runs/
-
+pretrained-models/

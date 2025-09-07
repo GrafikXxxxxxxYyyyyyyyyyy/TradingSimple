@@ -16,7 +16,7 @@ MODEL_REGISTRY = {
 
 
 
-class TradingModel:
+class TSModel:
     def __init__(
         self, 
         device: str = "mps"

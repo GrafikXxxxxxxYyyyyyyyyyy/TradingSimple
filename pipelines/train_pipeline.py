@@ -12,13 +12,13 @@ from torch.utils.tensorboard import SummaryWriter
 import time
 # --- --- ---
 
-from models.model_wrapper import TradingModel
-from utils.dataset import TradingDataset
+from models.model_wrapper import TSModel
+from utils.dataset import TSDataset
 
 
 
 @dataclass
-class TradingTrainingArgs:
+class TSTrainingArgs:
     train_batch_size: int = 8
     output_dir: str = 'pretrained-models'
     num_train_epochs: int = 1
@@ -28,18 +28,18 @@ class TradingTrainingArgs:
     adam_epsilon: float = 1e-08
     adam_weight_decay: float = 1e-2
     dataloader_num_workers: int = 0
-    save_steps: int = 500
+    save_steps: int = 1000
     # --- Добавлено для TensorBoard ---
     tensorboard_log_dir: str = "runs/trading_experiment" # Директория для логов TensorBoard
     # --- --- ---
 
 
-class TradingTrainer:
+class TSTrainer:
     def __init__(
         self, 
-        model: TradingModel, 
-        args: TradingTrainingArgs,
-        train_dataset: TradingDataset,
+        model: TSModel, 
+        args: TSTrainingArgs,
+        train_dataset: TSDataset,
     ):
         self.model = model
         self.args = args
@@ -86,15 +86,15 @@ class TradingTrainer:
         # 4. DataLoaders creation:
         def collate_fn(example):
             histories = [item['history'] for item in example]
-            targets = [item['target'] for item in example]
+            scores = [item['scores'] for item in example]
             tickers = [item['ticker'] for item in example]
 
             batch_histories = torch.cat(histories, dim=0)  
-            batch_targets = torch.cat(targets, dim=0)      
+            batch_scores = torch.cat(scores, dim=0)      
 
             return {
                 'history': batch_histories,
-                'target': batch_targets,
+                'scores': batch_scores,
                 'ticker': tickers
             }
 
@@ -115,12 +115,12 @@ class TradingTrainer:
         global_step = 0
         for epoch in range(self.args.num_train_epochs):
             for step, batch in enumerate(train_dataloader):
-                # target = batch['target'].to(self.model.device)
-                # history = batch['history'].to(self.model.device)
+                real_scores = batch['scores'].to(self.model.device)
+                history = batch['history'].to(self.model.device)
                 
-                # model_pred = self.model(history, target)
+                pred_scores = self.model(history)
 
-                # loss = loss_function(model_pred.float(), target.float())
+                loss = loss_function(pred_scores.float(), real_scores.float())
 
                 loss.backward()
                 optimizer.step()

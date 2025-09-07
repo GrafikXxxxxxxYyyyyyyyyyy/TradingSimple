@@ -1,0 +1,11 @@
+{
+  "model_type": "TSTransformer",
+  "input_seq_len": 256,
+  "input_dim": 256,
+  "embed_dim": 512,
+  "num_heads": 8,
+  "num_layers": 6,
+  "ff_dim": 2048,
+  "dropout": 0.1,
+  "final_head_dim": 768
+}
